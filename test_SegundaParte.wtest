@@ -1,0 +1,110 @@
+import TP_SegundaParte.*
+describe "Test de Segunda Parte" 
+{
+	
+	var joaquin
+	var lucia
+	var kike
+	var soledad
+	
+	var laFamilia
+	var eres
+	var corazon_americano
+	var cisne
+	var alma_de_diamante
+	var crisantemo
+	
+	var especialLaFamilia
+	var laSole
+	var paraLosArboles
+	var justCrisantemo
+	
+	fixture 
+	{
+		
+		joaquin = new MusicoDeGrupo(20, 5)
+		lucia = new VocalistaPopular(70, 'familia')
+		kike = new MusicoDeGrupo(60, 20)
+		soledad = new VocalistaPopular(55, 'amor')
+		
+		laFamilia = new Cancion("La Familia","Quiero brindar por mi gente sencilla, por el amor brindo por la familia", 264)
+		eres = new Cancion("Eres","Eres lo mejor que me pasó en la vida, no tengo duda, no habrá más nada después de ti. Eres lo que le dio brillo al día a día, y así será por siempre, no cambiará, hasta el final de mis días.",145)
+		corazon_americano = new Cancion("Corazón Americano","Canta corazón, canta más alto, que tu pena al fin se va marchando, el nuevo milenio ha de encontrarnos, junto corazón, como soñamos.",154)
+		cisne = new Cancion("Cisne","Hoy el viento se abrió quedó vacío el aire una vez más y el manantial brotó y nadie está aquí y puedo ver que solo estallan las hojas al brillar", 312)
+		alma_de_diamante = new Cancion("Alma de diamante","Ven a mí con tu dulce luz alma de diamante. Y aunque el sol se nuble después sos alma de diamante. Cielo o piel silencio o verdad sos alma de diamante. Por eso ven así con la humanidad alma de diamante",216)
+		crisantemo = new Cancion("Crisantemo","Tócame junto a esta pared, yo quede por aquí... cuando no hubo más luz... quiero mirar a través de mi piel... Crisantemo, que se abrió... encuentra el camino hacia el cielo",175)
+		
+		especialLaFamilia = new Album("Especial La Familia","17/06/1992",100000, 89000,[laFamilia])
+		laSole = new Album("La Sole","04/02/2005",200000,130000,[eres,corazon_americano])
+		paraLosArboles = new Album("Para los árboles","31/03/2003",50000,49000,[cisne, alma_de_diamante])
+		justCrisantemo = new Album("Just Crisantemo","05/12/2007",28000,27500,[crisantemo])
+		
+		joaquin.agregarAlbum(especialLaFamilia)
+		soledad.agregarAlbum(laSole)
+		luisAlberto.agregarAlbumes([paraLosArboles, justCrisantemo])
+	}
+	test "crisantemoEsCorta" 
+	{
+		assert.that(crisantemo.esCorta())
+	}
+	test "AlmaDeDiamanteEsCorta"
+	{
+		assert.notThat(alma_de_diamante.esCorta())
+	}
+	test "SoledadEsMinimalista"
+	{
+		assert.that(soledad.esMinimalista())
+	}
+	test "LuisAlbertoEsMinimalista"
+	{
+		assert.notThat(luisAlberto.esMinimalista())
+	}
+	test "JuaquinEsMinimalista"
+	{
+		assert.notThat(joaquin.esMinimalista())
+	}
+	test "CancionesLuisAlbertoConPalabraCielo"
+	{
+		assert.equals(['Alma de diamante','Crisantemo'], luisAlberto.cancionesConPalabra('cielo'))
+	}
+	test "CancionesLuisAlbertoConPalabraPujante"
+	{
+		assert.equals([], luisAlberto.cancionesConPalabra('pujante'))
+	}
+	test "SegundosObraDeKike"
+	{
+		assert.equals(0,kike.segundosDeObra())
+	}
+	test "SegundosObraDeSoledad"
+	{
+		assert.equals(299, soledad.segundosDeObra())
+	}
+	test "SegundosObraDeLuis"
+	{
+		assert.equals(703, luisAlberto.segundosDeObra())
+	}
+	test "CancionMasLargaParaLosArboles"
+	{
+		assert.equals("Alma de diamante", paraLosArboles.cancionMasLarga())
+	}
+	test "CancionMasLargaLaSole"
+	{
+		assert.equals("Eres", laSole.cancionMasLarga())
+	}
+	test "CancionMasLargaEspecialLaFamilia"
+	{
+		assert.equals("La Familia", especialLaFamilia.cancionMasLarga())
+	}
+	test "LuisAlbertoLaPego"
+	{
+		assert.that(luisAlberto.laPego())
+	}
+	test "SoledadLaPego"
+	{
+		assert.notThat(soledad.laPego())
+	}
+	test "joaquinLaPego"
+	{
+		assert.that(joaquin.laPego())
+	}
+}

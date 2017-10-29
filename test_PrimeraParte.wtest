@@ -1,0 +1,145 @@
+import TP_PrimeraParte.*
+describe "Test de Primera Parte" {
+	var cisne = new Canciones()
+	var laFamilia = new Canciones()
+	var presentacion = new Presentacion()
+	var lunaPark = new Lugar()
+	var trastienda = new Lugar()
+	
+	fixture {
+		lunaPark.nombre("Luna Park")
+		trastienda.nombre("Trastienda")
+		laFamilia.duracion(264)
+		cisne.duracion(312)
+		laFamilia.letra("Quiero brindar por mi gente sencilla, por el amor brindo por la familia")
+		cisne.letra("Hoy el viento se abrió quedó vacío el aire una vez más y el manantial brotó y nadie está aquí y puedo ver que solo estallan las hojas al brillar")
+	}
+	
+test "conocerHabilidadJoaquinEnGrupo" {
+	joaquin.solista(false)
+	assert.equals(25, joaquin.habilidad())
+}
+test "conocerHabilidadJoaquinSolista" {
+	assert.equals(20, joaquin.habilidad())
+}
+test "conocerHabilidadLuciaEnGrupo" {
+	lucia.solista(false)
+	assert.equals(50, lucia.habilidad())
+}
+test "conocerHabilidadLuciaSolista" {
+	assert.equals(70, lucia.habilidad())
+}
+test "conocerHabilidadLuisAlbertoFender" {
+	luisAlberto.guitarraToca(fender)
+	assert.equals(80, luisAlberto.habilidad())
+}
+test "conocerHabilidadLuisAlbertoGibsonSana" {
+	luisAlberto.guitarraToca(gibson)
+	assert.equals(100, luisAlberto.habilidad())
+}
+test "conocerHabilidadLuisAlbertoGibson" {
+	luisAlberto.guitarraToca(gibson)
+	gibson.estaSana(false)
+	assert.equals(40, luisAlberto.habilidad())
+}
+test "interpretaBienJoaquinLaFamilia" {
+	assert.notThat(joaquin.interpretaBien(laFamilia))
+}
+test "interpretaBienJoaquinCisne" {
+	assert.that(joaquin.interpretaBien(cisne))
+}
+test "interpretaBienLuciaLaFamilia" {
+	assert.that(lucia.interpretaBien(laFamilia))
+}
+test "interpretaBienLuciaCisne" {
+	assert.notThat(lucia.interpretaBien(cisne))
+}
+test "interpretaBienLuisAlbertoLaFamilia" {
+	assert.that(luisAlberto.interpretaBien())
+}
+test "interpretaBienLuisAlbertoCisne" {
+	assert.that(luisAlberto.interpretaBien())
+}
+test "cuantoCobraJoaquinLunaPark" {
+	lunaPark.capacidad(presentacion)
+	presentacion.fecha(new Date(20,04,2017))
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(lunaPark)
+	assert.equals(50, joaquin.cobra(presentacion))
+}
+test "cuantoCobraJoaquinLunaParkSolo" {
+	lunaPark.capacidad(presentacion)
+	presentacion.fecha(new Date(20,04,2017))
+	presentacion.duracion(1)
+	presentacion.agregarCantante(joaquin)
+	presentacion.lugar(lunaPark)
+	assert.equals(100, joaquin.cobra(presentacion))
+}
+test "capacidadTrastiendaSabado" {
+	presentacion.fecha(new Date(05,08,2017))
+	trastienda.capacidad(presentacion)
+	assert.equals(700,trastienda.capacidad())
+}
+test "capacidadTrastienda" {
+	presentacion.fecha(new Date(08,08,2017))
+	trastienda.capacidad(presentacion)
+	assert.equals(400,trastienda.capacidad())
+}
+test "cuantoCobraLuciaLunaPark" {
+	presentacion.fecha(new Date(20,04,2017))
+	lunaPark.capacidad(presentacion)
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(lunaPark)
+	assert.equals(500, lucia.cobra(presentacion))
+}
+test "cuantoCobraLuciaTranstienda" {
+	presentacion.fecha(new Date(15,11,2017))
+	trastienda.capacidad(presentacion)	
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(trastienda)
+	assert.equals(400, lucia.cobra(presentacion))
+}
+test "cuantoCobraLuisAlbertoLunaPark" {
+	presentacion.fecha(new Date(20,04,2017))
+	lunaPark.capacidad(presentacion)
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(lunaPark)
+	assert.equals(1000, luisAlberto.cobra(presentacion))
+}
+test "cuantoCobraLuisAlbertoTrastienda" {
+	presentacion.fecha(new Date(15,11,2017))
+	trastienda.capacidad(presentacion)	
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(trastienda)
+	assert.equals(1200, luisAlberto.cobra(presentacion))
+}
+test "costoPresentacionLunaPark" {
+	presentacion.fecha(new Date(20,04,2017))
+	lunaPark.capacidad(presentacion)
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(lunaPark)
+	assert.equals(1550,presentacion.calcularCosto())
+}
+test "costoPresentacionTrastienda" {
+	presentacion.fecha(new Date(15,11,2017))
+	trastienda.capacidad(presentacion)	
+	presentacion.agregarCantante(joaquin)
+	presentacion.agregarCantante(lucia)
+	presentacion.agregarCantante(luisAlberto)
+	presentacion.lugar(trastienda)
+	assert.equals(1650,presentacion.calcularCosto())
+}
+	
+}
