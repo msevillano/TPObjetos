@@ -1,141 +1,121 @@
-class Musico 
-{
+class Musico {
 	var habilidad
 	var solista
 	var albumes = []
-	/**************************Set & Get**********************************/
-	method habilidad(cant)
-	{
-		habilidad = cant
+	/*Setters */
+	method habilidad(unaCantidad){
+		habilidad = unaCantidad
 	}	
-	method solista(val){
-		solista = val
+	method solista(unValor){
+		solista = unValor
 	}
-	method agregarAlbum(album)
-	{
+	method agregarAlbum(album){
 		albumes.add(album)
 	}
-	method agregarAlbumes(listAlbumes)
-	{
-		albumes.addAll(listAlbumes)
+	method agregarAlbumes(listaDeAlbumes){
+		albumes.addAll(listaDeAlbumes)
 	}
-	
-	
-	method habilidad()
-	{
+	/*Getters */
+	method habilidad(){
 		return habilidad
 	}
-	method solista()
-	{
+	method solista(){
 		return solista
 	}
-	method albumesPublicados()
-	{
+	method albumesPublicados(){
 		return albumes
 	}
 	
-	
-	/***************************Funcionalidades*********************/
-	method esMinimalista()
-	{
+	// Funcionalidad 1
+	method esMinimalista(){
 		return albumes.all({album => album.cancionesCortas()})
 	}
-	
-	method cancionesConPalabra(word)
-	{
-		/*Esta opcion comentada, wollow me dice que la intente anidar como si fuese un oneliner
-		 * para nosotros es lo mas prolijo, pero dejamos ambas opciones.
-		 *var listaCanciones = (albumes.map({album => album.cancionesConPalabra(unaPalabra.toLowerCase())})).flatten()
-		 *return listaCanciones.map({cancion => cancion.titulo()})
-		 */
-		 
-		// Opcion segun wollok
-		return ((albumes.map({album => album.cancionesConPalabra(word.toLowerCase())})).flatten()).map({cancion => cancion.titulo()})
+	// Funcionalidad 2
+	method cancionesConPalabra(unaPalabra){
+		return self.obtenerTituloCanciones(self.obtenerListadoCancionesConPalabra(unaPalabra))
 	}
-	
-	method segundosDeObra()
-	{ 
+	method obtenerListadoCancionesConPalabra(unaPalabra) {
+		return albumes.map({album => album.cancionesConPalabra(unaPalabra)}).flatten()
+	}
+	method obtenerTituloCanciones(listaCanciones) {
+		return listaCanciones.map({cancion => cancion.titulo()})
+	}
+	// Funcionalidad 3
+	method segundosDeObra(){ 
 		return (albumes.map({album => album.duracionAlbum()})).sum()
 	}
+	// Funcionalidad 5
+	method laPego(){
+		return (self.tuvoBuenaVenta(self.sacarPorcentajeDeTodosAlbumes()))
+	}
 	
-	method laPego()
-	{
-		var porcentajes = albumes.map({album => album.porcentajeVendido()})
-		return ((porcentajes.sum())/porcentajes.size() > 75)
+	method tuvoBuenaVenta(porcentajes) {
+		return (porcentajes.sum()/self.cantidadDeAlbumes() > 75)
+	}
+	
+	method cantidadDeAlbumes() {
+		return albumes.size()
+	}
+	
+	method sacarPorcentajeDeTodosAlbumes() {
+		return albumes.map({album => album.porcentajeVendido()})
 	}
 }
 
-class MusicoDeGrupo inherits Musico
-{
+class MusicoDeGrupo inherits Musico{
 	var plusPorGrupo
 	
-	constructor(_habilidad, _plusPorGrupo)
-	{
+	constructor(_habilidad, _plusPorGrupo){
 		habilidad = _habilidad
 		plusPorGrupo = _plusPorGrupo 
 	}
 	
-	method interpretaBien(cancion) 
-	{
-		return (cancion.duracion() > 300)
+	method interpretaBien(unaCancion) {
+		return (unaCancion.duracion() > 300)
 	}
 	
-	method cobra(show) 
-	{
-		if(show.tocaSolo()){
-			return 100 * show.duracion()
+	method cobra(unaPresentacion) {
+		if(unaPresentacion.tocaSolo()){
+			return 100 * unaPresentacion.duracion()
 		} else {
 			return 50+plusPorGrupo
 		}		
 	}
-	
-	override method habilidad() 
-	{
-		if(solista) 
-		{
+	override method habilidad() {
+		if(solista) {
 			return habilidad
-		} else 
-		{
+		} else {
 			return (habilidad + 5)
 		}
 	}
 }
 
-class VocalistaPopular inherits Musico
-{
+class VocalistaPopular inherits Musico{
 	var palabraInspiradora
 	
-	constructor(_habilidad, _palabraInspiradora)
-	{
+	constructor(_habilidad, _palabraInspiradora){
 		habilidad = _habilidad
 		palabraInspiradora = _palabraInspiradora
 	}
 	
-	method interpretaBien(cancion) 
-	{
-		return (cancion.tienePalabra(palabraInspiradora))
+	method interpretaBien(unaCancion) {
+		return (unaCancion.tienePalabra(palabraInspiradora))
 	}
-	method cobra(presentacion) 
-	{
-		if(self.lugarConcurrido(presentacion))
-		{
+	method cobra(unaPresentacion) {
+		if(self.lugarConcurrido(unaPresentacion)){
 			return 500
 		} else {
 			return 400
 		}		
 	}
-	method lugarConcurrido(presentacion) 
-	{
-		return presentacion.capacidad() > 5000	
+	method lugarConcurrido(unaPresentacion) {
+		return unaPresentacion.capacidad() > 5000	
 	}
 	
-	override method habilidad() 
-	{
-		if(solista) 
-		{
+	override method habilidad() {
+		if(solista) {
 			return habilidad
-		} else 
-		{
+		} else {
 			return (habilidad - 20)
 		}
 	}
@@ -143,97 +123,80 @@ class VocalistaPopular inherits Musico
 
 object luisAlberto inherits Musico{
 	var guitarraToca
-	
-	/**************************Set & Get**********************************/
-	
-	method guitarraToca(guitarra) 
-	{
-		guitarraToca = guitarra
+	/*Setter */
+	method guitarraToca(unaGuitarra) {
+		guitarraToca = unaGuitarra
 	}
-	
-	method guitarraToca() 
-	{
+	/*Getters */
+	method guitarraToca() {
 		return guitarraToca
 	}
 	
 	method interpretaBien () = true
-	method cobra(presentacion) 
-	{
-		if(self.anterior(presentacion)) 
-		{
+	method cobra(unaPresentacion) {
+		if(self.anterior(unaPresentacion)) {
 			return 1000
-		} else 
-		{
+		} else {
 			return 1200
 		}
 	}
-	method anterior(presentacion) 
-	{
-		return presentacion.fecha().year() == 2017 && presentacion.fecha().month() < 9
+	method anterior(unaPresentacion) {
+		return unaPresentacion.fecha().year() <= 2017 && unaPresentacion.fecha().month() < 9
 	}
 	
-	override method habilidad() 
-	{
-		if((guitarraToca.precio()*8) > 100) 
-		{
+	override method habilidad() {
+		if(self.multiplicarPrecioGuitarraPor(8) > 100) {
 			return 100
-		} else 
-		{
-			return (guitarraToca.precio() *8)
+		} else {
+			return self.multiplicarPrecioGuitarraPor(8)
 		}
+	}
+	
+	method multiplicarPrecioGuitarraPor(unNum) {
+		return guitarraToca.precio()*unNum
 	}
 }
 
-object fender 
-{
+object fender {
 	var precio = 10
-	
-	method precio(valor) 
-	{
-		precio = valor
+	/*Setter */
+	method precio(unPrecio) {
+		precio = unPrecio
 	}
-	
-	method precio () 
-	{
+	/*Getter */
+	method precio () {
 		return precio
 	}
 }
 
 object gibson {
 	var estaSana = true
-	
-	method estaSana(valor) 
-	{
-		estaSana = valor
+	/*Setter */
+	method estaSana(unValor) {
+		estaSana = unValor
 	}
-	
-	method estaSana() 
-	{
+	/*Getter */
+	method estaSana() {
 		return estaSana
 	}
 	
-	method precio() 
-	{
-		if(estaSana) 
-		{
+	method precio() {
+		if(estaSana) {
 			return 15
-		} else 
-		{
+		} else {
 			return 5
 		}
 	}
 }
 
-class Album
-{
+class Album{
 	var titulo
 	var fechaLanzamiento
 	var unidadesALaVenta
 	var unidadesVendidas
 	var canciones
 	
-	constructor(_titulo, _fechaLanzamiento, _unidadesALaVenta, _unidadesVendidas, _canciones)
-	{
+	constructor(_titulo, _fechaLanzamiento, _unidadesALaVenta, _unidadesVendidas, _canciones){
 		titulo = _titulo
 		fechaLanzamiento = _fechaLanzamiento
 		unidadesALaVenta = _unidadesALaVenta
@@ -241,62 +204,51 @@ class Album
 		canciones = _canciones
 	}
 	
-	method cancionesCortas()
-	{
+	method cancionesCortas(){
 		return canciones.all({cancion => cancion.esCorta()})
 	}
 	
-	method porcentajeVendido()
-	{
+	method porcentajeVendido(){
 		return (unidadesVendidas*100)/unidadesALaVenta
 	}
-	method cancionesConPalabra(unaPalabra)
-	{
-		var listaCanciones = []
-		canciones.forEach({cancion =>if(cancion.tienePalabra(unaPalabra)){listaCanciones.add(cancion)}})
-		return listaCanciones
+	method cancionesConPalabra(unaPalabra){
+		return canciones.filter({cancion =>
+							cancion.tienePalabra(unaPalabra.toLowerCase())
+						})
 	}
 	
-	method duracionAlbum()
-	{
+	method duracionAlbum(){
 		return (canciones.map({cancion => cancion.duracion()})).sum()
 	}
-
-	method cancionMasLarga()
-	{
+//	Funcionalidad 4
+	method cancionMasLarga(){
 		return canciones.max({cancion => cancion.largoCancion()}).titulo()
 	}
 }
 
-class Cancion
-{
+class Cancion{
 	var titulo
 	var letra
 	var duracion
 	
-	constructor(_titulo, _letra, _duracion)
-	{
+	constructor(_titulo, _letra, _duracion){
 		titulo = _titulo
 		letra = _letra
 		duracion = _duracion
 	}
-	
-	method duracion()
-	{
+	/*Getter */
+	method duracion(){
 		return duracion
 	}
 	
-	method titulo()
-	{
+	method titulo(){
 		return titulo
 	}
-	method tienePalabra(word) 
-	{
-		return (letra.toLowerCase().contains(word))
+	method tienePalabra(unaPalabra) {
+		return (letra.contains(unaPalabra))
 	}
 	
-	method esCorta()
-	{
+	method esCorta(){
 		return ((duracion/60) < 3)
 	}
 	
@@ -305,93 +257,72 @@ class Cancion
 	}
 }
 
-class Presentacion 
-{
+class Presentacion {
 	var fecha
 	var lugar
 	var cantantes = []
 	var duracion
 	/*Setters */
-	method fecha(date) 
-	{
-		fecha = date
+	method fecha(unaFecha) {
+		fecha = unaFecha
 	}
-	method lugar(place) 
-	{
-		lugar = place
+	method lugar(unLugar) {
+		lugar = unLugar
 	}
-	method duracion(time) 
-	{
-		duracion = time
+	method duracion(unaDuracion) {
+		duracion = unaDuracion
 	}
-	
-	method fecha() 
-	{
+	/*Getters */
+	method fecha() {
 		return fecha
 	}
-	method lugar() 
-	{
+	method lugar() {
 		return lugar
 	}
-	method duracion() 
-	{
+	method duracion() {
 		return duracion
 	}
 
-	method capacidad() 
-	{
+	method capacidad() {
 		return lugar.capacidad()
 	}	
-	method agregarCantante(cantante) 
-	{
-		cantantes.add(cantante)	
+	method agregarCantante(unCantante) {
+		cantantes.add(unCantante)	
 	}
-	method tocaSolo() 
-	{
+	method tocaSolo() {
 		return (cantantes.size() == 1)
 	}
-	method calcularCosto() 
-	{
+	method calcularCosto() {
 		return cantantes.sum({cantante => cantante.cobra(self)})
 	}
 }
 
-class Lugar 
-{
+class Lugar {
 	var capacidad
 	var nombre
-	
-	method capacidad(presentacion) 
-	{
-		if(nombre.contains("Luna Park")) 
-		{
+	/*Setter */
+	method capacidad(unaPresentacion) {
+		if(nombre.contains("Luna Park")) {
 			capacidad = 9290
-		} else 
-		{
-			self.calcularCapacidad(presentacion)
+		} else {
+			self.calcularCapacidad(unaPresentacion)
 		}
 	}
-	method nombre(name) 
-	{
-		nombre = name
+	method nombre(unNombre) {
+		nombre = unNombre
 	}
-	
-	method capacidad() 
-	{
+	/*Getter */
+	method capacidad() {
 		return capacidad
 	}
-	method nombre() 
-	{
+	method nombre() {
 		return nombre
 	}
 	
-	method calcularCapacidad(unaPresentacion) 
-	{
-		if(unaPresentacion.fecha().dayOfWeek() == 6) 
-		{
+	method calcularCapacidad(unaPresentacion) {
+		if(unaPresentacion.fecha().dayOfWeek() == 6) {
 			capacidad =  700
-		} else 
-		{
+		} else {
 			capacidad = 400
 		}	
 	}	
